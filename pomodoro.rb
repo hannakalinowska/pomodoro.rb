@@ -23,16 +23,20 @@ def progress(time, number_of_chunks)
   end
 end
 
-def start(chunk)
+def notify_about(chunk)
+  `#{chunk.notifier} #{chunk.message}`
+end
+
+def run(chunk)
   puts "\n#{chunk.name}!"
   say_start
   progress(chunk.time, 20)
-  `#{chunk.notifier} #{chunk.message}`
+  notify_about(chunk)
 end
 
 pomodoro_count = 0
 loop do
   pomodoro_count += 1
-  start(pomodoro)
-  pomodoro_count % 4 == 0 ? start(long_break) : start(short_break)
+  run(pomodoro)
+  pomodoro_count % 4 == 0 ? run(long_break) : run(short_break)
 end
