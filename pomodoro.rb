@@ -2,8 +2,9 @@
 
 require 'ostruct'
 
-pomodoro = OpenStruct.new(:time => 1500, :message => 'Pomodoro Time is up!')
-pause = OpenStruct.new(:time => 300, :message => 'Pomodoro Break is up!')
+pomodoro = OpenStruct.new(:name => 'Pomodoro', :time => 25 * 60, :message => 'Pomodoro Time is up!')
+short_break = OpenStruct.new(:name => 'Short break', :time => 5 * 60, :message => 'Pomodoro Break is up!')
+long_break = OpenStruct.new(:name => 'Long break', :time => 15 * 60, :message => 'Pomodoro Break is up!')
 notifier = 'growlnotify -s -m '
 
 def say_start
@@ -22,14 +23,16 @@ def progress(time, number_of_chunks)
   end
 end
 
-loop do
-  puts "\nPomodoro!"
+def start(chunk)
+  puts "\n#{chunk.name}!"
   say_start
-  progress(pomodoro.time, 20)
-  `#{notifier} #{pomodoro.message}`
+  progress(chunk.time, 20)
+  `#{notifier} #{chunk.message}`
+end
 
-  puts "\nBreak!"
-  say_start
-  progress(pomodoro.time, 20)
-  `#{notifier} #{pause.message}`
+pomodoro_count = 0
+loop do
+  pomodoro_count += 1
+  start(pomodoro)
+  pomodoro_count % 4 ? start(long_break) : start(short_break)
 end
