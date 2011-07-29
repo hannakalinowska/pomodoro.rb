@@ -15,8 +15,8 @@ def progress(time, number_of_chunks)
   chunk = 1.0 * time / number_of_chunks
   1.upto(number_of_chunks) do |i|
     print "|"
-    print '=' * i
-    print ' ' * (number_of_chunks - i)
+    print '==' * i
+    print '  ' * (number_of_chunks - i)
     print "|\r"
     STDOUT.flush
     sleep chunk
