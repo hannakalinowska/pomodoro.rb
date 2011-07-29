@@ -34,5 +34,5 @@ pomodoro_count = 0
 loop do
   pomodoro_count += 1
   start(pomodoro)
-  pomodoro_count % 4 ? start(long_break) : start(short_break)
+  pomodoro_count % 4 == 0 ? start(long_break) : start(short_break)
 end
