@@ -14,12 +14,15 @@ end
 
 def progress(time, number_of_updates)
   duration = 1.0 * time / number_of_updates
-  1.upto(number_of_updates) do |i|
-    print "|"
-    print '==' * i
-    print '  ' * (number_of_updates - i)
-    print "|\r"
-    STDOUT.flush
+  progress_bar = ''
+
+  0.upto(number_of_updates) do |i|
+    percentage = (i * 1.0 / number_of_updates * 100).to_i
+    progress_bar << '|' << '==' * i << '  ' * (number_of_updates - i) << "| #{percentage}%\r"
+
+    print progress_bar
+    $stdout.flush
+
     sleep duration
   end
 end
