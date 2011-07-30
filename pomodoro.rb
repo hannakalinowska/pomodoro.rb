@@ -27,6 +27,10 @@ def progress(time, number_of_updates)
   end
 end
 
+def long_break_time?
+  @pomodoro_count % 4 == 0
+end
+
 def finish(chunk)
   `#{chunk.notifier} #{chunk.message}`
 end
@@ -37,9 +41,9 @@ def run(chunk)
   finish(chunk)
 end
 
-pomodoro_count = 0
+@pomodoro_count = 0
 loop do
-  pomodoro_count += 1
+  @pomodoro_count += 1
   run(pomodoro)
-  pomodoro_count % 4 == 0 ? run(long_break) : run(short_break)
+  long_break_time? ? run(long_break) : run(short_break)
 end
