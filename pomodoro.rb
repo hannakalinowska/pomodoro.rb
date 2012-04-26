@@ -2,14 +2,33 @@
 
 require 'ostruct'
 
+options = ARGV
+if options.include?('--help') || options.include?('-h')
+  puts "A simple pomodoro timer in ruby."
+  puts "Usage:"
+  puts "$ ruby pomodoro.rb [--time TIME]"
+  puts "TIME: time (in minutes) of a single pomodoro"
+  exit
+end
+
+pomodoro_time = 25 # minutes
+if i = options.index('--time')
+  pomodoro_time = options[i+1].to_i
+  if pomodoro_time == 0
+    puts "Invalid time specified."
+    exit(1)
+  end
+end
+
+
 notifier = 'growlnotify -s -m '
-pomodoro = OpenStruct.new(:name => 'Pomodoro', :time => 25 * 60, :message => 'Pomodoro Time is up!', :notifier => notifier)
+pomodoro = OpenStruct.new(:name => 'Pomodoro', :time => pomodoro_time * 60, :message => 'Pomodoro Time is up!', :notifier => notifier)
 short_break = OpenStruct.new(:name => 'Short break', :time => 5 * 60, :message => 'Pomodoro Break is up!', :notifier => notifier)
 long_break = OpenStruct.new(:name => 'Long break', :time => 15 * 60, :message => 'Pomodoro Break is up!', :notifier => notifier)
 
 def start(chunk)
   puts "\n#{chunk.name}!"
-  puts "started: #{Time.now.strftime('%H:%M')}"
+  puts "started: #{Time.now.strftime('%H:%M')} (duration: #{chunk.time/60}m)"
 end
 
 def progress(time, number_of_updates)
